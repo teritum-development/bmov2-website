@@ -25,6 +25,7 @@
     <meta property="og:description" content="A feature-rich Discord Bot with Music, Games, NSFW and more!"/>
     <meta property="og:image" content="https://bmobot.xyz/img/bmo.png"/>
     <script async src="https://arc.io/widget.min.js#wH3HAhe5"></script>
+    <script src="https://js.stripe.com/v3/"></script>
 </head>
 
 <body>
@@ -133,7 +134,44 @@
 				<td><i class="fa fa-check"></i></td>
 			  </tr>
 			</table>
-			<p>Please contact Primus#1337 for donation options. Please do not use any PayPal forms which you may or may not find on this page.</p>
+<!--			<p>Please contact Primus#1337 for donation options. Please do not use any PayPal forms which you may or may not find on this page.</p>-->
+            <section class="container">
+            <button  class="button-blurple"
+                    data-checkout-mode="subscription"
+                    data-price-id="price_1JvJraExAOeZ5Kbi4Zk6dHWg"
+                    data-price-id_="price_1Juk9JExAOeZ5Kbi425LMO14"
+            >
+                Bronze
+            </button>
+            </section>
+            <section class="container">
+            <button class="button-blurple"
+                    data-checkout-mode="subscription"
+                    data-price-id="price_1JvJraExAOeZ5KbilmTgzPVh"
+                    data-price-id_="price_1Juk9JExAOeZ5Kbi425LMO14"
+            >
+                Silver
+            </button>
+            </section>
+            <section class="container">
+            <button class="button-blurple"
+                    data-checkout-mode="subscription"
+                    data-price-id="price_1JvJraExAOeZ5KbiYOZivE2Z"
+                    data-price-id_="price_1Juk9JExAOeZ5Kbi425LMO14"
+            >
+                Gold
+            </button>
+            </section>
+            <section class="container">
+            <button class="button-blurple"
+                    data-checkout-mode="subscription"
+                    data-price-id="price_1JvJraExAOeZ5KbiSljSpWUk"
+                    data-price-id_="price_1Juk94ExAOeZ5Kbi0tEQirkb"
+            >
+                Platinum
+            </button>
+            </section>
+
 <!--            <form action="https://www.paypal.com/cgi-bin/webscr" method="post" target="_top" style="width: 100%;">-->
 <!--				<input type="hidden" name="cmd" value="_xclick-subscriptions">-->
 <!--				<input type="hidden" name="business" value="CF6XRH2HJUYEL">-->
@@ -176,6 +214,40 @@
     </div>
 </div>
 <script src="js/main.js"></script>
+
+<script>
+    // const PUBLISHABLE_KEY = 'pk_live_51JuhHmExAOeZ5KbiLJQYWjWOdXDUMzsNXiUhqyYLqaiubG8sIOqUzegLub7sNk1hSItwNZHRuu52CLX8Az103aA400BOMuV3Gc';
+    const PUBLISHABLE_KEY = "pk_test_51JuhHmExAOeZ5Kbit0mM3wRIvHb5XASwUmfPXsaS6Qpgto94SsZWeUGRHZwgnWjc8arfKvtADrnMUhG7yWaw85hk00OqphGgD3";
+    const DOMAIN = location.href.replace(/[^/]*$/, '');
+    const stripe = Stripe(PUBLISHABLE_KEY);
+    const handleResult = function (result) {
+        if (result.error) {
+            const displayError = document.getElementById('error-message');
+            displayError.textContent = result.error.message;
+        }
+    };
+    document.querySelectorAll('button').forEach(function (button) {
+        button.addEventListener('click', function (e) {
+            const mode = e.target.dataset.checkoutMode;
+            const priceId = e.target.dataset.priceId;
+            const items = [{ price: priceId, quantity: 1 }];
+
+            // Make the call to Stripe.js to redirect to the checkout page
+            // with the sku or plan ID.
+            stripe
+                .redirectToCheckout({
+                    mode: mode,
+                    lineItems: items,
+                    successUrl:
+                        DOMAIN + 'success.html?session_id={CHECKOUT_SESSION_ID}',
+                    cancelUrl:
+                        DOMAIN + 'canceled.html?session_id={CHECKOUT_SESSION_ID}',
+                })
+                .then(handleResult);
+        });
+    });
+</script>
+
 </body>
 
 </html>
