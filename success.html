@@ -6,27 +6,43 @@
     <title>Payment Success</title>
     <link rel="stylesheet" href="css/normalize.css" />
     <link rel="stylesheet" href="css/global.css" />
+    <script src=
+                    "https://ajax.googleapis.com/ajax/libs/jquery/3.5.1/jquery.min.js">
+    </script>
     <script src="https://js.stripe.com/v3/"></script>
 </head>
 <body>
 <div class="sr-root">
     <div class="sr-main">
         <header class="sr-header">
-            <a href="./" class="sr-header__logo"></a>
+            <a href="./" class="sr-header__logo">Back</a>
         </header>
         <div class="sr-payment-summary completed-view">
-            <h1>Your payment succeeded</h1>
-            <h4>Checkout Session ID: <span id="session"></span> - Please give this with your email which you entered in the form to @Primus#1337 to have your benefits added.</h4>
+            <h1>Thanks for your payment, <span id="name"></span> of £<span id="payment-amount"></span></h1>
+            <h4>Please DM @Primus#1337 with your Invoice ID (<span id="invoice-id"></span>) and your donation reward shall be fulfilled. Keep in mind that this is a SUBSCRIPTION.</h4>
         </div>
     </div>
     <script>
         const urlParams = new URLSearchParams(window.location.search);
 
         if (urlParams.has("session_id")) {
-            document.getElementById("session").textContent = urlParams.get(
-                "session_id"
-            );
+
+            fetch(`https://bmov2-stripe-api.teritum.dev/order/success/${urlParams.get('session_id')}`, {
+
+            }).then((response) => {
+                response.json().then((data) => {
+                    if (data.status === 'error') {
+                        console.log("Error");
+                        return;
+                    }
+                    $('#name').text(data.customer.name);
+                    $('#payment-amount').text(data.session.amount_total / 100);
+                    $('#invoice-id').text(data.session.invoice_id);
+                    console.log(data);
+                });
+            });
         }
     </script>
+</div>
 </body>
 </html>
