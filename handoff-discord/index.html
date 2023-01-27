@@ -1,0 +1,39 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>BMO| Donation Handoff system</title>
+  <script src=
+                  "https://ajax.googleapis.com/ajax/libs/jquery/3.5.1/jquery.min.js">
+  </script>
+</head>
+<body>
+<h1>Thank you for donating <span id="name"></span>!</h1>
+    <p id="info">Fulfilling Payment.</p>
+    <script>
+        const urlParams = new URLSearchParams(window.location.search);
+        let discord_id = urlParams.get('discord_id');
+        let session_id = urlParams.get('session_id');
+        let discord_name = urlParams.get('discord_name');
+        if (urlParams.has("session_id")) {
+            fetch(`https://bmov2-stripe-api.teritum.dev/order/success/register`, {
+              method: 'POST',
+              body: {
+                discord_id: discord_id,
+                session: session_id,
+              }
+            }).then((response) => {
+                response.json().then((data) => {
+                    if (data.status === 'error') {
+                        console.log(data);
+                        return;
+                    }
+                    $('#name').text(discord_name);
+                    $('#info').text(`Your donation of £${data.amount / 100} has been registered.`);
+                    console.log(data);
+                });
+            });
+        }
+    </script>
+</body>
+</html>
