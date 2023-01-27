@@ -18,10 +18,13 @@
         if (urlParams.has("session_id")) {
             fetch(`https://bmov2-stripe-api.teritum.dev/order/success/register`, {
               method: 'POST',
-              body: {
-                discord_id: discord_id,
-                session: session_id,
-              }
+                headers: {
+                    'Content-Type': 'application/json'
+                },
+                body: JSON.stringify({
+                    discord_id: discord_id,
+                    session_id: session_id,
+                })
             }).then((response) => {
                 response.json().then((data) => {
                     if (data.status === 'error') {
