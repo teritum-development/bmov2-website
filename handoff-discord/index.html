@@ -16,14 +16,18 @@
         let session_id = urlParams.get('session_id');
         let discord_name = urlParams.get('discord_name');
         if (urlParams.has("session_id")) {
-            fetch(`https://bmov2-stripe-api.teritum.dev/order/success/register`, {
-              method: 'POST',
-                body: JSON.stringify({
+
+            $.ajax({
+                url: 'https://bmov2-stripe-api.teritum.dev/order/success/register',
+                type: 'POST',
+                data: JSON.stringify({
                     discord_id: discord_id,
-                    session_id: session_id,
-                })
-            }).then((response) => {
-                response.json().then((data) => {
+                    session_id: session_id
+                }),
+                contentType: 'application/json; charset=utf-8',
+                dataType: 'json',
+                async: false,
+                success: function(data) {
                     if (data.status === 'error') {
                         console.log(data);
                         return;
@@ -31,8 +35,9 @@
                     $('#name').text(discord_name);
                     $('#info').text(`Your donation of £${data.amount / 100} has been registered.`);
                     console.log(data);
-                });
+                }
             });
+
         }
     </script>
 </body>
