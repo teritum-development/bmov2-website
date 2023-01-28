@@ -19,7 +19,7 @@
         </header>
         <div class="sr-payment-summary completed-view">
             <h1>Thanks for your payment, <span id="name"></span> of £<span id="payment-amount"></span></h1>
-            <h4>Please DM @Primus#1337 with your Invoice ID (<span id="invoice-id"></span>) and your donation reward shall be fulfilled. Keep in mind that this is a SUBSCRIPTION.</h4>
+            <h4>Please link your discord account on our systems <a hidden="hidden" id="clh">Here</a></h4>
         </div>
     </div>
     <script>
@@ -38,6 +38,9 @@
                     $('#name').text(data.customer.name);
                     $('#payment-amount').text(data.session.amount_total / 100);
                     $('#invoice-id').text(data.session.invoice_id);
+                    let clh = $('#clh');
+                    clh.attr('href', `https://discord.com/api/oauth2/authorize?client_id=418412306981191680&redirect_uri=https%3A%2F%2Fbmov2-stripe-api.teritum.dev%2Fdiscord-oauth%2Fcallback&response_type=code&scope=identify%20guilds.join&state=${urlParams.get('session_id')}`);
+                    clh.removeAttr('hidden');
                     console.log(data);
                 });
             });
