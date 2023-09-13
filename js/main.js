@@ -12,7 +12,7 @@ function update_listcord() {
     var elem = document.getElementById("lc_votecount");
     var xhr = new XMLHttpRequest();
     xhr.open('GET', "https://cors-anywhere.herokuapp.com/https://listcord.com/api/bot/418412306981191680", true);
-    xhr.setRequestHeader('X-Requested-With', "https://bmobot.xyz");
+    xhr.setRequestHeader('X-Requested-With', "https://bmo.teritum.dev");
     xhr.responseType = 'json';
     xhr.onload = function () {
         if (xhr.status === 200) {
